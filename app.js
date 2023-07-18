@@ -12,6 +12,8 @@ app.listen(3000, () => {
 });
 
 let todos = ["Cook", "Eat", "Wash", "Run"]
+let workList = []
+
 const today = new Date();
 let options = {
     day: "numeric",
@@ -21,16 +23,30 @@ let options = {
 
 day = today.toLocaleDateString("en-US", options);
 
-
+// Home Directory
 app.get("/", (req,res) => {
-    res.render("index", {dayOfWeek : day, tasks: todos});
+    res.render("index", {listTitle : day, tasks: todos, dirName: "home"});
 });
 
-
 app.post("/", (req,res) => {
-    userTask = req.body.task;
-    todos.push(userTask);
-    res.render("index", {dayOfWeek : day, tasks: todos});
+    taskPage = req.body.button;
+    if(taskPage === 'home'){
+        userTask = req.body.task;
+        todos.push(userTask); 
+        res.redirect("/");
+    }
 })
 
+// Work Directory
+app.get("/work", (req,res) => {
+    
+    res.render('index', {listTitle: "Work", tasks: workList, dirName: "work"})
+});
+
+app.post("/work", (req,res) => {
+    workTask = req.body.task;
+    workList.push(workTask);
+    res.redirect("/work");
+
+})
 
